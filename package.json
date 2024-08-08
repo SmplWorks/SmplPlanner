@@ -8,6 +8,7 @@
     "build": "vinxi build"
   },
   "dependencies": {
+    "@solid-primitives/storage": "^3.8.0",
     "@solidjs/router": "^0.14.1",
     "@solidjs/start": "^1.0.6",
     "@types/semver": "^7.5.8",

@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@solid-primitives/storage':
+    specifier: ^3.8.0
+    version: 3.8.0(solid-js@1.8.19)
   '@solidjs/router':
     specifier: ^0.14.1
     version: 0.14.1(solid-js@1.8.19)
@@ -1207,6 +1210,30 @@ packages:
   /@sindresorhus/merge-streams@2.3.0:
     resolution: {integrity: sha512-LtoMMhxAlorcGhmFYI+LhPgbPZCkgP6ra1YL604EeF6U98pLlQ3iWIGMdWSC+vWmPBWBNgmDBAhnAobLROJmwg==}
     engines: {node: '>=18'}
+    dev: false
+
+  /@solid-primitives/storage@3.8.0(solid-js@1.8.19):
+    resolution: {integrity: sha512-FNzsl60/zrMA2blDIjh2i6k2fnKECn870UssaKg5y9+wrXTJlce8vv0CxC3Mw7uHZnnPnDQGNyuBqeJ5mRZkOA==}
+    peerDependencies:
+      '@tauri-apps/plugin-store': '*'
+      solid-js: ^1.6.12
+      solid-start: '*'
+    peerDependenciesMeta:
+      '@tauri-apps/plugin-store':
+        optional: true
+      solid-start:
+        optional: true
+    dependencies:
+      '@solid-primitives/utils': 6.2.3(solid-js@1.8.19)
+      solid-js: 1.8.19
+    dev: false
+
+  /@solid-primitives/utils@6.2.3(solid-js@1.8.19):
+    resolution: {integrity: sha512-CqAwKb2T5Vi72+rhebSsqNZ9o67buYRdEJrIFzRXz3U59QqezuuxPsyzTSVCacwS5Pf109VRsgCJQoxKRoECZQ==}
+    peerDependencies:
+      solid-js: ^1.6.12
+    dependencies:
+      solid-js: 1.8.19
     dev: false
 
   /@solidjs/router@0.14.1(solid-js@1.8.19):
