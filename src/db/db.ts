@@ -61,6 +61,22 @@ export class DB {
 
         parsed.version = currentVersion;
 
+        parsed.tasks.oneOff.forEach((task) => {
+            task.doneDate = task.doneDate && new Date(task.doneDate);
+            task.skippedDate = task.skippedDate && new Date(task.skippedDate);
+
+            task.metadata.creationDate = task.metadata.creationDate && new Date(task.metadata.creationDate);
+            task.metadata.lastUpdateDate = task.metadata.lastUpdateDate && new Date(task.metadata.lastUpdateDate);
+        });
+
+        parsed.tasks.routine.forEach((task) => {
+            task.lastDoneDate = task.lastDoneDate && new Date(task.lastDoneDate);
+            task.lastSkippedDate = task.lastSkippedDate && new Date(task.lastSkippedDate);
+
+            task.metadata.creationDate = task.metadata.creationDate && new Date(task.metadata.creationDate);
+            task.metadata.lastUpdateDate = task.metadata.lastUpdateDate && new Date(task.metadata.lastUpdateDate);
+        });
+
         return parsed;
     }
 
@@ -147,7 +163,17 @@ export class DB {
     }
 
     getRoutines(): RoutineDef[] {
-        return this.#getTasks('routine') as RoutineDef[];
+        return (this.#getTasks('routine') as RoutineDef[]).toSorted((a, b) => {
+            if (a.time.hour < b.time.hour)
+                return -1;
+            else if (b.time.hour < a.time.hour)
+                return 1;
+            else if (a.time.minute < b.time.minute)
+                return -1;
+            else if (b.time.minute < a.time.minute)
+                return 1;
+            else return 0;
+        });
     }
     getRoutine(taskId: RoutineDef['id']): RoutineDef | null {
         return this.#getTask(taskId, 'routine') as RoutineDef | null;

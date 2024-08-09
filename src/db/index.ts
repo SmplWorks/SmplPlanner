@@ -1,9 +1,9 @@
 export {
     DB,
 
-    type TaskDef, type TaskType,
+    type TaskDef, type TaskType, type TaskStatus,
 
-    type OneOffDef, type OneOffStatus,
+    type OneOffDef,
     oneOffCalcStatus, oneOffIsSkipped,
 
     type RoutineDef,

@@ -40,6 +40,11 @@ export function oneOffCalcStatus(task: OneOffDef): TaskStatus {
 export type RoutineDef = TaskDef & {
     type: 'routine';
 
+    time: {
+        hour: number;
+        minute: number;
+    };
+
     lastDoneDate: Date | null;
     lastSkippedDate: Date | null;
 }

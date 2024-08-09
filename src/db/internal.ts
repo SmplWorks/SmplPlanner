@@ -10,7 +10,7 @@ export {
     type TaskType, TASK_TYPE,
 
     type OneOffDef,
-    type TaskStatus as OneOffStatus, TASK_STATUS as ONEOFF_STATUS,
+    type TaskStatus, TASK_STATUS,
     oneOffCalcStatus, oneOffIsSkipped,
 
     type RoutineDef,

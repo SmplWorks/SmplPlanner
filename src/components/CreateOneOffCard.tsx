@@ -13,7 +13,7 @@ export default function CreateOneOffCard() {
     const onCreate = (ev: SubmitEvent) => {
         ev.preventDefault();
 
-        let task = ctx.db.createOneOff(structuredClone({...props}));
+        let task = ctx.db.createOneOff({...props});
         if (task === null)
             alert('Could not create task');
     };
