@@ -2,8 +2,10 @@ export {
     DB,
 
     type TaskDef, type TaskType,
-    taskIsSkipped,
 
     type OneOffDef, type OneOffStatus,
-    oneOffCalcStatus,
+    oneOffCalcStatus, oneOffIsSkipped,
+
+    type RoutineDef,
+    routineCalcStatus, routineIsSkipped,
 } from './internal';

@@ -8,9 +8,11 @@ export {
 export {
     type TaskDef,
     type TaskType, TASK_TYPE,
-    taskIsSkipped,
 
     type OneOffDef,
-    type OneOffStatus, ONEOFF_STATUS,
-    oneOffCalcStatus,
+    type TaskStatus as OneOffStatus, TASK_STATUS as ONEOFF_STATUS,
+    oneOffCalcStatus, oneOffIsSkipped,
+
+    type RoutineDef,
+    routineCalcStatus, routineIsSkipped,
 } from './task';

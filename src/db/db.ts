@@ -5,11 +5,12 @@ import { SemVer } from 'semver';
 
 import { cloneDate } from '~/utils';
 
-import { type ID, type TaskDef, type OneOffDef } from '~/db/internal';
+import { type ID, type TaskDef, type OneOffDef, type RoutineDef } from '~/db/internal';
 
 export type DBDef = {
     tasks: {
         oneOff: OneOffDef[];
+        routine: RoutineDef[];
     };
 
     nextId: number;
@@ -21,6 +22,7 @@ export function initialDB(currentVersion: SemVer): DBDef {
     return {
         tasks: {
             oneOff: [],
+            routine: [],
         },
 
         nextId: 1,
@@ -68,54 +70,101 @@ export class DB {
         return nextId.toString();
     }
 
-    #setTaskMetadata(task: TaskDef, _property: string, _newValue: any, currentDate: Date) {
-        task.metadata.lastUpdateDate = cloneDate(currentDate);
-
-        switch (task.type) {
-        case 'oneOff':
-            break;
-        }
+    #getTasks<T extends OneOffDef | RoutineDef>(type: TaskDef['type']): T[] {
+        return this.#db.tasks[type] as T[];
     }
-
-    getOneOffs(): OneOffDef[] {
-        return this.#db.tasks.oneOff;
+    #getTask<T extends OneOffDef | RoutineDef>(taskId: T['id'], type: TaskDef['type']): T | null {
+        return (this.#db.tasks[type].find((task) => task.id === taskId) as T) || null;
     }
-    getOneOff(taskId: OneOffDef['id']): OneOffDef | null {
-        return this.#db.tasks.oneOff.find((task) => task.id === taskId) || null;
-    }
-    createOneOff(taskDef: Omit<OneOffDef, 'id' | 'type' | 'skippedDate' | 'doneDate' | 'metadata'>, currentDate?: Date): OneOffDef {
+    #createTask<T extends OneOffDef | RoutineDef>(taskDef: Omit<T, 'id' | 'metadata'>, currentDate?: Date): T {
         return batch(() => {
             currentDate = currentDate || new Date();
 
-            const task: OneOffDef = {
+            const task: T = {
                 ...taskDef,
                 id: this.#nextId(),
-                type: 'oneOff',
-
-                skippedDate: null,
-                doneDate: null,
 
                 metadata: {
                     lastUpdateDate: cloneDate(currentDate),
                     creationDate: cloneDate(currentDate),
                 },
-            };
-            this.#setDb('tasks', 'oneOff', (tasks) => [...tasks, task]);
+            } as T;
+            this.#setDb('tasks', task.type, (tasks) => [...tasks, task] as any);
             this.#setDb('lastUpdateDate', cloneDate(currentDate));
             return task;
         });
     }
-    setOneOffProperty<T extends keyof Omit<OneOffDef, 'id' | 'type' | 'metadata'>>(taskId: OneOffDef['id'], property: T, newValue: OneOffDef[T], currentDate?: Date): void {
+    #setTaskProperty<T extends OneOffDef | RoutineDef, K extends keyof Omit<T, 'id' | 'type' | 'metadata'>>(taskId: T['id'], property: K, newValue: T[K], type: TaskDef['type'], currentDate?: Date): void {
         currentDate = currentDate || new Date();
 
-        return this.#setDb('tasks', 'oneOff', (task) => task.id === taskId, (_task) => {
-            const task = {..._task};
-            task[property] = newValue;
-            this.#setTaskMetadata(task, property, newValue, currentDate);
-            return task;
+        return batch(() => {
+            this.#setDb('lastUpdateDate', cloneDate(currentDate));
+            this.#setDb('tasks', type, (task) => task.id === taskId, (_task) => {
+                const task = {..._task} as T;
+                task[property] = newValue;
+                task.metadata.lastUpdateDate = cloneDate(currentDate);
+
+                switch (task.type) {
+                case 'oneOff':
+                    break;
+                case 'routine':
+                    break;
+                }
+
+                return task;
+            });
         });
     }
-    deleteOneOff(taskId: OneOffDef['id']) {
-        this.#setDb('tasks', 'oneOff', (tasks) => tasks.filter((task) => task.id !== taskId));
+    #deleteTask(taskId: TaskDef['id'], type: TaskDef['type'], currentDate?: Date): void {
+        currentDate = currentDate || new Date();
+
+        return batch(() => {
+            this.#setDb('lastUpdateDate', cloneDate(currentDate));
+            this.#setDb('tasks', type, (tasks) => tasks.filter((task) => task.id !== taskId) as any);
+        });
+    }
+
+    getOneOffs(): OneOffDef[] {
+        return this.#getTasks('oneOff') as OneOffDef[];
+    }
+    getOneOff(taskId: OneOffDef['id']): OneOffDef | null {
+        return this.#getTask(taskId, 'oneOff') as OneOffDef | null;
+    }
+    createOneOff(taskDef: Omit<OneOffDef, 'id' | 'type' | 'skippedDate' | 'doneDate' | 'metadata'>, currentDate?: Date): OneOffDef {
+        return this.#createTask({
+            ...taskDef,
+            type: 'oneOff',
+
+            skippedDate: null,
+            doneDate: null,
+        }, currentDate);
+    }
+    setOneOffProperty<T extends keyof Omit<OneOffDef, 'id' | 'type' | 'metadata'>>(taskId: OneOffDef['id'], property: T, newValue: OneOffDef[T], currentDate?: Date): void {
+        return this.#setTaskProperty(taskId, property, newValue, 'oneOff', currentDate);
+    }
+    deleteOneOff(taskId: OneOffDef['id'], currentDate?: Date): void {
+        return this.#deleteTask(taskId, 'oneOff', currentDate);
+    }
+
+    getRoutines(): RoutineDef[] {
+        return this.#getTasks('routine') as RoutineDef[];
+    }
+    getRoutine(taskId: RoutineDef['id']): RoutineDef | null {
+        return this.#getTask(taskId, 'routine') as RoutineDef | null;
+    }
+    createRoutine(taskDef: Omit<RoutineDef, 'id' | 'type' | 'lastDoneDate' | 'lastSkippedDate' | 'metadata'>, currentDate?: Date): RoutineDef {
+        return this.#createTask({
+            ...taskDef,
+            type: 'routine',
+
+            lastDoneDate: null,
+            lastSkippedDate: null,
+        }, currentDate);
+    }
+    setRoutineProperty<T extends keyof Omit<RoutineDef, 'id' | 'type' | 'metadata'>>(taskId: RoutineDef['id'], property: T, newValue: RoutineDef[T], currentDate?: Date): void {
+        return this.#setTaskProperty(taskId, property, newValue, 'routine', currentDate);
+    }
+    deleteRoutine(taskId: RoutineDef['id'], currentDate?: Date): void {
+        return this.#deleteTask(taskId, 'routine', currentDate);
     }
 }
