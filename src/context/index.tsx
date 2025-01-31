@@ -3,10 +3,11 @@ import { useLocation, type Location } from "@solidjs/router";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
 import { cookieStorage, makePersisted } from "@solid-primitives/storage";
 import { resolveTemplate, translator, type Translator } from "@solid-primitives/i18n";
+import { createStore } from "solid-js/store";
 import { parse as parseSemver, type SemVer } from "semver";
 
 import { en_flat_dict, fetchDictionary, initialLocale, toLocale, type Dictionary, type Locale } from "./locale";
-import { createStore } from "solid-js/store";
+import { createDB, type DB } from "./db";
 
 interface Settings {
     locale: Locale;
@@ -35,6 +36,8 @@ interface AppCtx {
     get locale(): Locale;
     setLocale(newLocale: Locale): void;
     t: Translator<Dictionary>;
+
+    get db(): DB;
 }
 
 const AppContext = createContext<AppCtx>();
@@ -62,6 +65,8 @@ export default function AppContextProvider(props: ParentProps) {
 
     const t = translator(dict, resolveTemplate);
 
+    const db = createDB();
+
     const ctx: AppCtx = {
         version: currentVersion,
 
@@ -74,6 +79,8 @@ export default function AppContextProvider(props: ParentProps) {
             });
         },
         t,
+
+        db,
     };
 
     if (import.meta.env.DEV) {
