@@ -7,7 +7,7 @@ import { useLocation } from "@solidjs/router";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
 import { parse as parseSemver, type SemVer } from "semver";
 
-import { Flex } from "~/components/layout";
+import { Inline } from "~/components/layout";
 
 import { createTranslator, type Locale, type LocaleDir, type Translator } from "./locale";
 import { createSettings, type Theme } from "./settings";
@@ -79,13 +79,13 @@ export default function AppContextProvider(props: ParentProps) {
                     <Title>{t("global.site.title")} · {t("global.site.subtitle")}</Title>
                     <Meta name="lang" content={ctx.locale} />
 
-                    <Flex
+                    <Inline
                         id="AppContext"
                         dir={ctx.localeDir}
                         style={{"width": "100vw", "height": "100vh"}}
                     >
                         {props.children}
-                    </Flex>
+                    </Inline>
                 </AppContext.Provider>
             </Suspense>
         </MetaProvider>
