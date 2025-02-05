@@ -1,9 +1,9 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type User } from "@supabase/supabase-js";
 
 export interface DB {
-    getUser(): Promise<void>;
-    signIn(email: string, password: string): Promise<boolean>;
-    signOut(): Promise<void>;
+    getUser(): Promise<User | null>;
+    signIn(email: string, password: string): Promise<User | null>;
+    signOut(): Promise<boolean>;
 
     getTest(): Promise<any>;
     putTest(): Promise<any>;
@@ -14,22 +14,46 @@ const supabase = createClient(import.meta.env.VITE_DB_HOST, import.meta.env.VITE
 export function createDB(): DB {
     return {
         getUser: async () => {
-            console.log(await supabase.auth.getUser());
+            const { data: { user }, error } = await supabase.auth.getUser();
+            if (error !== null) {
+                console.error(`[db - getUser] ${error.code}: ${error.message}`);
+                return null;
+            }
+
+            return user;
         },
 
         signIn: async (email, password) => {
-            let { data, error } = await supabase.auth.signInWithPassword({email, password});
-            if (error !== null && error.code === "invalid_credentials") {
-                let { data, error } = await supabase.auth.signUp({email, password});
-                console.log("signUp", {data, error});
-            } else {
-                console.log("signIn", {data, error});
+            const { data: { user: signInUser }, error: signInError } = await supabase.auth.signInWithPassword({email, password});
+            if (signInUser !== null) {
+                return signInUser;
             }
 
-            return false;
+            // The user may not exist, try signing up instead
+            if (signInError!.code === "invalid_credentials") {
+                console.warn("[db - signIn] Trying to sign up");
+                const { data: { user: signUpUser }, error: signUpError } = await supabase.auth.signUp({email, password});
+                if (signUpUser !== null) {
+                    return signUpUser;
+                }
+
+                console.error(`[db - signIn] Error signing up, ${signUpError!.code}: ${signUpError!.message}`);
+                return null;
+            }
+
+            // TODO: Handle email_not_confirmed
+
+            console.error(`[db - signIn] ${signInError!.code}: ${signInError!.message}`);
+            return null;
         },
         signOut: async () => {
-            console.log(await supabase.auth.signOut());
+            const { error } = await supabase.auth.signOut();
+            if (error === null) {
+                return true;
+            }
+
+            console.error(`[db - signOut] ${error}`)
+            return false;
         },
 
         getTest: async () => {
