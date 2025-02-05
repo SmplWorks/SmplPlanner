@@ -1,0 +1,96 @@
+/* Base */
+[data-smpl-text] {
+    font-family: var(--smpl-fontFamily-normal);
+    font-weight: var(--smpl-fontWeight-normal);
+    text-wrap: nowrap;
+}
+
+/* TODO: as */
+
+/* Types */
+/* TODO: Line heights */
+[data-smpl-text ~= "type:h1"] {
+    font-family: var(--smpl-fontFamily-title, var(--smpl-fontFamily-normal));
+    font-size: var(--smpl-fontSize-h1);
+    letter-spacing: var(--smpl-letterSpacing-h1);
+}
+[data-smpl-text ~= "type:h2"] {
+    font-family: var(--smpl-fontFamily-title);
+    font-size: var(--smpl-fontSize-h2);
+    letter-spacing: var(--smpl-letterSpacing-h2);
+}
+[data-smpl-text ~= "type:h3"] {
+    font-family: var(--smpl-fontFamily-title);
+    font-size: var(--smpl-fontSize-h3);
+    letter-spacing: var(--smpl-letterSpacing-h3);
+}
+[data-smpl-text ~= "type:h4"] {
+    font-family: var(--smpl-fontFamily-title);
+    font-size: var(--smpl-fontSize-h4);
+    letter-spacing: var(--smpl-letterSpacing-h4);
+}
+[data-smpl-text ~= "type:h5"] {
+    font-family: var(--smpl-fontFamily-title);
+    font-size: var(--smpl-fontSize-h5);
+    letter-spacing: var(--smpl-letterSpacing-h5);
+}
+[data-smpl-text ~= "type:h6"] {
+    font-size: var(--smpl-fontSize-h6);
+    font-weight: var(--smpl-fontWeight-bold);
+    letter-spacing: var(--smpl-letterSpacing-h6);
+}
+[data-smpl-text ~= "type:h7"] {
+    font-size: var(--smpl-fontSize-h7);
+    letter-spacing: var(--smpl-letterSpacing-h7);
+}
+[data-smpl-text ~= "type:body"] {
+    font-size: var(--smpl-fontSize-body);
+    letter-spacing: var(--smpl-letterSpacing-body);
+}
+[data-smpl-text ~= "type:callout"] {
+    font-size: var(--smpl-fontSize-callout);
+    letter-spacing: var(--smpl-letterSpacing-callout);
+}
+[data-smpl-text ~= "type:label"] {
+    font-size: var(--smpl-fontSize-label);
+    font-weight: var(--smpl-fontWeight-boldish);
+    letter-spacing: var(--smpl-letterSpacing-label);
+}
+[data-smpl-text ~= "type:caption"] {
+    font-size: var(--smpl-fontSize-caption);
+    letter-spacing: var(--smpl-letterSpacing-caption);
+}
+[data-smpl-text ~= "type:overline"] {
+    font-size: var(--smpl-fontSize-callout);
+    letter-spacing: var(--smpl-letterSpacing-callout);
+    font-variant-caps: all-small-caps;
+}
+
+/* Case */
+[data-smpl-text ~= "case:normal"] {
+    text-transform: none;
+}
+[data-smpl-text ~= "case:lower"] {
+    text-transform: lowercase;
+}
+[data-smpl-text ~= "case:upper"] {
+    text-transform: uppercase;
+}
+[data-smpl-text ~= "case:capitalize"] {
+    text-transform: capitalize;
+}
+
+/* Bold, Italic */
+[data-smpl-text ~= "bold"] {
+    font-weight: var(--smpl-fontWeight-bold);
+}
+[data-smpl-text ~= "italic"] {
+    font-style: italic;
+}
+
+/* Wrap */
+[data-smpl-text ~= "wrap"] {
+    text-wrap: wrap;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}

@@ -1,0 +1,14 @@
+/* Base */
+[data-smpl-flex] {
+    display: flex;
+}
+
+[data-smpl-flex] > * {
+    flex: 0 0 auto;
+    margin: 0;
+}
+
+/* Space */
+[data-smpl-flex ~= "space:between"] { justify-content: space-between; }
+[data-smpl-flex ~= "space:around"] { justify-content: space-around; }
+[data-smpl-flex ~= "space:evenly"] { justify-content: space-evenly; }

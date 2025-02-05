@@ -1,0 +1,41 @@
+:root {
+    --c-white-hsl: 55 85 95;
+    --c-white: hsl(var(--c-white-hsl));
+
+    --c-black-hsl: 0 4 11;
+    --c-black: hsl(var(--c-black-hsl));
+
+    --c-gray-hsl: 0 0 23;
+    --c-gray: hsl(var(--c-gray-hsl));
+
+    --c-primary-hsl: 357 75 73;
+    --c-primary: hsl(var(--c-primary-hsl));
+
+    --c-secondary-hsl: 46 95 74;
+    --c-secondary: hsl(var(--c-secondary-hsl));
+
+    --c-accent-hsl: 120 100 70;
+    --c-accent: hsl(var(var(--c-accent-hsl)));
+}
+
+html[data-theme="light"] {
+    --c-text-hsl: var(--c-black-hsl);
+    --c-background-hsl: var(--c-white-hsl);
+}
+
+html[data-theme="dark"] {
+    --c-text-hsl: var(--c-white-hsl);
+    --c-background-hsl: var(--c-black-hsl);
+}
+
+html {
+    --c-text: hsl(var(--c-text-hsl));
+    --c-background: hsl(var(--c-background-hsl));
+    --c-outline: var(--c-gray);
+}
+
+#app {
+    color: var(--c-text);
+    fill: var(--c-text);
+    background-color: var(--c-background);
+}

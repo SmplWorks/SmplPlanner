@@ -1,0 +1,17 @@
+{
+    "locale": {
+        "locale": "es-AR",
+        "name": "Spanish (Argentina)",
+        "dir": "ltr"
+    },
+
+    "site": {
+        "title": "SmplPlanner",
+        "subtitle": "Para planificarte mejor"
+    },
+
+    "theme": {
+        "dark": "Oscuro",
+        "light": "Claro"
+    }
+}

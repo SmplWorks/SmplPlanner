@@ -1,0 +1,17 @@
+{
+    "locale": {
+        "locale": "en-US",
+        "name": "English",
+        "dir": "ltr"
+    },
+
+    "site": {
+        "title": "SmplPlanner",
+        "subtitle": "Planning made easy!"
+    },
+
+    "theme": {
+        "dark": "Dark",
+        "light": "Light"
+    }
+}

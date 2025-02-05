@@ -1,0 +1,133 @@
+/* SEE: https://github.com/necolas/normalize.css */
+
+*, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #app {
+  min-width: 100vw;
+  min-height: 100vh;
+}
+
+html {
+  /* Prevent adjustments of font size after orientation changes in iOS. (normalize.css) */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  /* TODO: Why */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+hr {
+  /* Add the correct box sizing in Firefox. (normalize.css) */
+  box-sizing: content-box;
+  height: 0;
+
+  /* Show the overflow in Edge and IE. (normalize.css) */
+  overflow: visible;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+b, strong {
+  /* Add the correct font weight in Chrome, Edge, and Safari. (normalize.css) */
+  font-weight: bolder;
+}
+
+/* Prevent `sub` and `sup` elements from affecting the line height in all browsers. (normalize.css) */
+sub, sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+sub {
+  bottom: -0.25em;
+}
+sup {
+  top: -0.5em;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+button, input, optgroup, select, textarea {
+  /* Change the font styles in all browsers. */
+  font-family: inherit;
+  font-size: 100%;
+  line-height: 1.15;
+}
+
+button, select {
+  /* Remove the inheritance of text transform in Edge, Firefox, and IE. (normalize.css) */
+  text-transform: none;
+}
+
+button, input {
+  /* Show the overflow in IE and Edge. (normalize.css) */
+  overflow: visible;
+}
+
+button, [type="button"], [type="reset"], [type="submit"] {
+  /* Correct the inability to style clickable types in iOS and Safari. (normalize.css) */
+  -webkit-appearance: button;
+}
+
+button::-moz-focus-inner,
+[type="button"]::-moz-focus-inner,
+[type="reset"]::-moz-focus-inner,
+[type="submit"]::-moz-focus-inner {
+  /* Remove the inner border and padding in Firefox. (normalize.css) */
+  border-style: none;
+}
+
+button:-moz-focusring,
+[type="button"]:-moz-focusring,
+[type="reset"]:-moz-focusring,
+[type="submit"]:-moz-focusring {
+  /* Restore the focus styles unset by the previous rule. (normalize.css) */
+  outline: 1px dotted ButtonText;
+}
+
+progress {
+  /* Add the correct vertical alignment in Chrome, Firefox, and Opera. (normalize.css) */
+  vertical-align: baseline;
+}
+
+[type="number"]::-webkit-inner-spin-button,
+[type="number"]::-webkit-outer-spin-button {
+  /* Correct the cursor style of increment and decrement buttons in Chrome. (normalize.css) */
+  height: auto;
+}
+
+[type="search"] {
+  /* Correct the odd appearance in Chrome and Safari. (normalize.css) */
+  -webkit-appearance: textfield;
+
+  /* Correct the outline style in Safari. (normalize.css) */
+  outline-offset: -2px;
+}
+
+[type="search"]::-webkit-search-decoration {
+  /* Remove the inner padding in Chrome and Safari on macOS. (normalize.css) */
+  -webkit-appearance: none;
+}
+
+::-webkit-file-upload-button {
+  /* Correct the inability to style clickable types in iOS and Safari. (normalize.css) */
+  -webkit-appearance: button;
+
+  /* Change font properties to `inherit` in Safari. (normalize.css) */
+  font: inherit;
+}

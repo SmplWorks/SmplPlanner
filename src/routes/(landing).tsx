@@ -1,11 +1,13 @@
-import { useAppContext } from "../context";
+import { Stack, Text } from "~/components/layout";
+import { useAppContext } from "~/context";
 
 export default function Home() {
-    const { t } = useAppContext();
+    const ctx = useAppContext();
+    const { t } = ctx;
 
     return (
-        <main>
-            <h1>{t("global.greet")}</h1>
-        </main>
+        <Stack fill>
+            <Text type="h1">{t("global.site.title")}</Text>
+        </Stack>
     );
 }

@@ -1,66 +1,49 @@
-import { createContext, useContext, Suspense, type ParentProps, createResource, createEffect, startTransition } from "solid-js";
-import { useLocation, type Location } from "@solidjs/router";
+import {
+    Suspense,
+    createContext, useContext, createEffect, startTransition,
+    type ParentProps,
+} from "solid-js";
+import { useLocation } from "@solidjs/router";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
-import { cookieStorage, makePersisted } from "@solid-primitives/storage";
-import { resolveTemplate, translator, type Translator } from "@solid-primitives/i18n";
 import { parse as parseSemver, type SemVer } from "semver";
 
-import { en_flat_dict, fetchDictionary, initialLocale, toLocale, type Dictionary, type Locale } from "./locale";
-import { createStore } from "solid-js/store";
+import { Flex } from "~/components/layout";
 
-interface Settings {
-    locale: Locale;
-}
+import { createTranslator, type Locale, type LocaleDir, type Translator } from "./locale";
+import { createSettings, type Theme } from "./settings";
+import "./reset.css";
+import "./smpl-base.css";
+import "./app.css";
 
-function initialSettings(location: Location): Settings {
-    return {
-        locale: initialLocale(location),
-    };
-}
-
-function deserializeSettings(value: string, location: Location): Settings {
-    const parsed = JSON.parse(value) as unknown;
-    if (!parsed || typeof parsed !== 'object') {
-        return initialSettings(location);
-    }
-
-    return {
-      locale: ('locale' in parsed && typeof parsed.locale === 'string' && toLocale(parsed.locale)) || initialLocale(location),
-    };
-}
-
-interface AppCtx {
+type AppCtx = {
     get version(): SemVer;
 
     get locale(): Locale;
+    get localeDir(): LocaleDir;
+    get t(): Translator;
     setLocale(newLocale: Locale): void;
-    t: Translator<Dictionary>;
+
+    get theme(): Theme;
+    setTheme(newTheme: Theme): void;
 }
 
 const AppContext = createContext<AppCtx>();
 export const useAppContext = () => useContext(AppContext)!;
 
 export default function AppContextProvider(props: ParentProps) {
-    const currentVersion = parseSemver(APP_VERSION + (import.meta.env.DEV ? "-dev" : ""))!;
     const location = useLocation();
 
-    const now = new Date();
-    const [ settings, set ] = makePersisted(createStore(initialSettings(location)), {
-        storageOptions: {
-            expires: new Date(now.getFullYear()+1, now.getMonth(), now.getDate()),
-            sameSite: "Lax",
-        },
-        storage: cookieStorage,
-        deserialize: (value) => deserializeSettings(value, location),
-    });
+    const currentVersion = parseSemver(APP_VERSION + (import.meta.env.DEV ? "-dev" : ""))!;
+    const [ settings, set ] = createSettings(location);
 
-    const locale = () => settings.locale;
-    const [ dict ] = createResource(locale, fetchDictionary, { initialValue: en_flat_dict });
     createEffect(() => {
         document.documentElement.lang = settings.locale;
     });
+    createEffect(() => {
+        document.documentElement.setAttribute("data-theme", settings.theme);
+    });
 
-    const t = translator(dict, resolveTemplate);
+    const t = createTranslator(() => settings.locale);
 
     const ctx: AppCtx = {
         version: currentVersion,
@@ -68,12 +51,20 @@ export default function AppContextProvider(props: ParentProps) {
         get locale() {
             return settings.locale;
         },
+        get localeDir() {
+            return t("global.locale.dir") === "rtl" ? "rtl" : "ltr";
+        },
         setLocale(newLocale) {
-            void startTransition(() => {
-                set("locale", newLocale);
-            });
+            startTransition(() => set("locale", newLocale));
         },
         t,
+
+        get theme() {
+            return settings.theme;
+        },
+        setTheme(newTheme) {
+            startTransition(() => set("theme", newTheme));
+        },
     };
 
     if (import.meta.env.DEV) {
@@ -82,16 +73,21 @@ export default function AppContextProvider(props: ParentProps) {
     }
 
     return (
-        <AppContext.Provider value={ctx}>
-            <MetaProvider>
-                <Title>{t("global.title")}</Title>
-                <Meta name="lang" content={locale()} />
+        <MetaProvider>
+            <Suspense>
+                <AppContext.Provider value={ctx}>
+                    <Title>{t("global.site.title")} · {t("global.site.subtitle")}</Title>
+                    <Meta name="lang" content={ctx.locale} />
 
-                <div id="AppContext">
-                    <a href="/">Index</a>
-                    <Suspense>{props.children}</Suspense>
-                </div>
-            </MetaProvider>
-        </AppContext.Provider>
+                    <Flex
+                        id="AppContext"
+                        dir={ctx.localeDir}
+                        style={{"width": "100vw", "height": "100vh"}}
+                    >
+                        {props.children}
+                    </Flex>
+                </AppContext.Provider>
+            </Suspense>
+        </MetaProvider>
     );
 }

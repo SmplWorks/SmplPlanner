@@ -1,17 +1,17 @@
 // SEE: https://github.com/solidjs/solid-site/blob/1bb2ed684acae0ac036e4338d73786393e96b86c/src/AppContext.tsx
+import { createResource, type Accessor } from "solid-js";
 import { type Location } from "@solidjs/router";
-import {
-    flatten,
-    type Flatten,
-} from "@solid-primitives/i18n";
+import { translator, flatten, resolveTemplate, type Flatten } from "@solid-primitives/i18n";
 
-import { dict as en_dict } from "../../lang/en";
+import { dict as en_dict } from "../../i18n/en";
 
 type RawDictionary = typeof en_dict;
 
-export type Locale =
-    "en"
-    | "es";
+export const LOCALES = ["en", "es"] as const;
+export type Locale = (typeof LOCALES)[number];
+
+export const LOCALE_DIRS = ["ltr", "rtl"] as const;
+export type LocaleDir = (typeof LOCALE_DIRS)[number];
 
 /*
 for validating of other dictionaries have same keys as en dictionary
@@ -21,7 +21,7 @@ type DeepPartial<T> = T extends Record<string, unknown> ? { [K in keyof T]?: Dee
 
 const raw_dict_map: Record<Locale, () => Promise<{ dict: DeepPartial<RawDictionary> }>> = {
     en: () => null as any, // en is loaded by default
-    es: () => import("../../lang/es"),
+    es: () => import("../../i18n/es"),
 };
 
 export type Dictionary = Flatten<RawDictionary>;
@@ -63,3 +63,14 @@ export function initialLocale(location: Location): Locale {
 
     return "en";
 }
+
+export function deserializeLocale(locale: any, location: Location): Locale {
+    return (typeof locale === "string" && toLocale(locale)) || initialLocale(location);
+}
+
+export function createTranslator(locale: Accessor<Locale>) {
+    const [ dict ] = createResource(locale, fetchDictionary, { initialValue: en_flat_dict, });
+    return translator(dict, resolveTemplate);
+}
+
+export type Translator = ReturnType<typeof createTranslator>;

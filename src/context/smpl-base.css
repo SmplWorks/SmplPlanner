@@ -1,0 +1,53 @@
+:root {
+    --smpl-space-xxl: 20em;
+    --smpl-space-xl: 10em;
+    --smpl-space-l: 5em;
+    --smpl-space-m: 1em;
+    --smpl-space-s: 0.5em;
+    --smpl-space-xs: 0.25em;
+    --smpl-space-xxs: 0.01em;
+
+    --smpl-radius-xxl: 1.75em;
+    --smpl-radius-xl: 1.5em;
+    --smpl-radius-l: 1.25em;
+    --smpl-radius-m: 1em;
+    --smpl-radius-s: 0.75em;
+    --smpl-radius-xs: 0.5em;
+    --smpl-radius-xxs: 0.25em;
+
+    --smpl-fontFamily-normal: Poppins, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    --smpl-fontFamily-title: Rubik, var(--smpl-fontFamily-normal);
+
+    --smpl-fontSize-h1: 4.235em;
+    --smpl-fontSize-h2: 2.618em;
+    --smpl-fontSize-h3: 2.058em;
+    --smpl-fontSize-h4: 1.618em;
+    --smpl-fontSize-h5: 1.272em;
+    --smpl-fontSize-h6: 1.129em;
+    --smpl-fontSize-h7: 0.885em;
+    --smpl-fontSize-body: 1em;
+    --smpl-fontSize-callout: 0.943em;
+    --smpl-fontSize-label: 0.835em;
+    --smpl-fontSize-caption: 0.786em;
+    --smpl-fontSize-overline: 0.786em;
+
+    --smpl-fontWeight-bolder: 700;
+    --smpl-fontWeight-bold: 600;
+    --smpl-fontWeight-boldish: 500;
+    --smpl-fontWeight-normal: 400;
+
+    /* TODO: Line-heights */
+
+    --smpl-letterSpacing-h1: -0.022em;
+    --smpl-letterSpacing-h2: -0.022em;
+    --smpl-letterSpacing-h3: -0.022em;
+    --smpl-letterSpacing-h4: -0.02em;
+    --smpl-letterSpacing-h5: -0.017em;
+    --smpl-letterSpacing-h6: -0.014em;
+    --smpl-letterSpacing-h7: -0.007em;
+    --smpl-letterSpacing-body: -0.011em;
+    --smpl-letterSpacing-callout: -0.009em;
+    --smpl-letterSpacing-label: -0.004em;
+    --smpl-letterSpacing-caption: -0.007em;
+    --smpl-letterSpacing-overline: 0.0618em;
+}
