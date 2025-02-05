@@ -114,7 +114,7 @@ export default function Box<T extends ElementType = "div">(props: BoxProps<T>) {
         paddingT() ? `paddingT:${paddingT()}` : "",
         paddingB() ? `paddingB:${paddingB()}` : "",
 
-        gapX() ? `gapX:${gapY()}` : "",
+        gapX() ? `gapX:${gapX()}` : "",
         gapY() ? `gapY:${gapY()}` : "",
 
         radiusTL() ? `radiusTL:${radiusTL()}` : "",
